@@ -1,0 +1,7 @@
+*.swp
+.project
+.classpath
+.settings
+classes
+bin
+MagicKeyTyper.jar
