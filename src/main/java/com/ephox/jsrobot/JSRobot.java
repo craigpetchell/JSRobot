@@ -1,13 +1,23 @@
-package com.ephox.keytyper;
+package com.ephox.jsrobot;
 
 import java.applet.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class MagicKeyTyper extends Applet {
+import netscape.javascript.*;
+
+public class JSRobot extends Applet {
+
+	private static final long serialVersionUID = 1L;
 
 	public void init() {
 		System.setSecurityManager(null);
+		performCallback();
+	}
+	
+	private void performCallback() {
+		JSObject js = JSObject.getWindow(this);
+		js.call("robot.callback", new Object[0]);
 	}
 	
 	public boolean typeKey(int keycode, boolean shiftKey) {

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+    <head>
+		<script type="text/javascript" src="http://www.google.com/jsapi"></script>
+		<script type="text/javascript">
+			google.load("jquery", "1.3");
+		</script>
+        <link rel="stylesheet" href="qunit/qunit.css" type="text/css" media="screen" />
+        <script type="text/javascript" src="qunit/qunit.js"></script>
+		<script src="../src/main/js/robot.js"></script>
+		
+        <script>
+        	$(document).ready(function() {
+	        	robot.init(function() {
+			    	QUnit.setup();
+				});
+			var content;
+			module('Typing In Textarea', {
+				setup: function() { 
+	        		content = document.getElementById('content');
+					content.value = '';
+				}
+			});
+	        test("Typing into a text area", function() {
+				document.getElementById('content').focus();
+				robot.type('a');
+				equals(content.value, 'a');
+	        });
+			});
+        </script>
+    </head>
+    <body>
+        <h1 id="qunit-header">QUnit example</h1>
+        <h2 id="qunit-banner"></h2>
+        <h2 id="qunit-userAgent"></h2>
+        <ol id="qunit-tests">
+        </ol>
+		
+		<textarea id="content"></textarea>
+    </body>
+	
+</html>
