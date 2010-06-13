@@ -1,24 +1,34 @@
 window.robot = {
 		
-	init: function(callback) {
-		this.callback = callback;
-		setTimeout(function() {
-			this.appletInstance = document.createElement('applet');
-			this.appletInstance.width = 1;
-			this.appletInstance.height = 1;
-			this.appletInstance.archive = '../JSRobot.jar';
-			this.appletInstance.code = 'com.ephox.jsrobot.JSRobot';
-			this.appletInstance.id = 'robotApplet';
-			
-			document.body.appendChild(this.appletInstance);
-		}, 1);
+	onload: function(userCallback) {
+		if (this.ready) {
+			userCallback();
+		} else {
+			this.userCallback = userCallback;
+		}
 	},
 	
-	type: function(key, shiftKey) {
+	init: function() {
+		document.write('<applet cache_archive="../JSRobot.jar" cache_archive_ex="../JSRobot.jar" cache_option="Plugin" archive="../JSRobot.jar" code="com.ephox.jsrobot.JSRobot" id="robotApplet" width="10" height="10" mayscript="true"><param name="mayscript" value="true" /></applet>');
+		this.appletInstance = document.getElementById('robotApplet');
+	},
+	
+	callback: function() {
+		this.ready = true;
+		if (this.userCallback) {
+			this.userCallback();
+		}
+	},
+	
+	type: function(key, shiftKey, callback) {
+		shiftKey = !!shiftKey;
 		this.getApplet().typeKey(key, shiftKey);
+		setTimeout(callback, 10);
 	},
 	
 	getApplet: function() {
-		return this.appletInstance;
+		return document.getElementById('robotApplet');
 	},
 };
+
+window.robot.init();

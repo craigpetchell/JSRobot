@@ -7,36 +7,40 @@
 		</script>
         <link rel="stylesheet" href="qunit/qunit.css" type="text/css" media="screen" />
         <script type="text/javascript" src="qunit/qunit.js"></script>
-		<script src="../src/main/js/robot.js"></script>
 		
         <script>
         	$(document).ready(function() {
-	        	robot.init(function() {
-			    	QUnit.setup();
+				var content;
+				module('Typing In Textarea', {
+					setup: function() { 
+		        		content = document.getElementById('content');
+						content.value = '';
+					}
 				});
-			var content;
-			module('Typing In Textarea', {
-				setup: function() { 
-	        		content = document.getElementById('content');
-					content.value = '';
-				}
-			});
-	        test("Typing into a text area", function() {
-				document.getElementById('content').focus();
-				robot.type('a');
-				equals(content.value, 'a');
-	        });
+		        asyncTest('Simple character', function() {
+					content.focus();
+					robot.type(0x41, false, function() {
+						equals(content.value, 'a');
+						QUnit.start();
+					});
+		        });
+				
+				window.robot.onload(function() {
+					QUnit.setup();
+				});
 			});
         </script>
     </head>
     <body>
-        <h1 id="qunit-header">QUnit example</h1>
-        <h2 id="qunit-banner"></h2>
-        <h2 id="qunit-userAgent"></h2>
-        <ol id="qunit-tests">
-        </ol>
+        <h1 id="qunit-header">Unit tests for text formatting</h1>
+		<h2 id="qunit-banner"></h2>
+		<div id="qunit-testrunner-toolbar"></div>
+		<h2 id="qunit-userAgent"></h2>
+		<ol id="qunit-tests"></ol>
 		
-		<textarea id="content"></textarea>
+		<textarea id="content" rows="10" cols="80"></textarea>
+		<script src="../src/main/js/robot.js"></script>
+		<script>document.getElementById('content').focus();</script>
     </body>
 	
 </html>
