@@ -54,31 +54,6 @@ public class JSRobot extends Applet {
 	}
 	
 	public boolean typeKey(final int keycode, final boolean shiftKey) {
-		/*final Throwable[] errors = new Throwable[1];
-		Thread t = new Thread() {
-			public void run() {
-				synchronized (errors) {
-					try {
-						doTypeKey(keycode, shiftKey);
-					} catch (Throwable t) {
-						t.printStackTrace();
-						errors[0] = t;
-					}
-					errors.notifyAll();
-				}
-			}
-		};
-		t.setName("Type key thread");
-		synchronized (errors) {
-			t.start();
-			try {
-				errors.wait();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-				return false;
-			}
-		}
-		return errors[0] == null;*/
 		try {
 			doTypeKey(keycode, shiftKey);
 			return true;

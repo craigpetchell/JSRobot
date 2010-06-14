@@ -28,7 +28,7 @@ window.robot = {
 	
 	getApplet: function() {
 		return document.getElementById('robotApplet');
-	},
+	}
 };
 
 window.robot.init();
