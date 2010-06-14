@@ -22,7 +22,6 @@ public class JSRobot extends Applet {
 			}
 		});
 		this.setFocusable(false);
-		add(new Label("Hello World"));
 	}
 	
 	public void start() {
