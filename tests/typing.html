@@ -32,6 +32,20 @@
 					});
 				});
 				
+				asyncTest('Converting from upper case character to keycode', function() {
+					robot.type('Z', false, function() {
+						equals(content.value, 'z');
+						QUnit.start();
+					});
+				});
+				
+				asyncTest('Typing with shift key', function() {
+					robot.type('h', true, function() {
+						equals(content.value, 'H');
+						QUnit.start();
+					});
+				});
+				
 				window.robot.onload(function() {
 					QUnit.setup();
 				});
