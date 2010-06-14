@@ -22,7 +22,7 @@ window.robot = {
 	
 	type: function(key, shiftKey, callback) {
 		this.getApplet().typeKey(this.getKeycode(key), shiftKey);
-		setTimeout(callback, 10);
+		setTimeout(callback, 100);
 	},
 	
 	getKeycode: function(key) {
