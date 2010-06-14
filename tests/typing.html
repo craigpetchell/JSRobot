@@ -4,7 +4,6 @@
     	<title>Unit tests for typing</title>
 		<script type="text/javascript" src="http://www.google.com/jsapi"></script>
 		<script type="text/javascript">
-			document.domain = document.domain + "";
 			google.load("jquery", "1.3");
 		</script>
         <link rel="stylesheet" href="qunit/qunit.css" type="text/css" media="screen" />
@@ -119,7 +118,7 @@
 					frame = document.createElement('iframe');
 					frame.height = '100';
 					frame.width = '100';
-					frame.src = 'javascript:document.open();document.domain="' + document.domain + '";document.write("<html><head></head><body>' + content + '</body></html>");document.close();window.parent.iframeLoaded(document);';
+					frame.src = 'javascript:document.open();document.write("<html><head></head><body>' + content + '</body></html>");document.close();window.parent.iframeLoaded(document);';
 					document.body.appendChild(frame);
 				}
 				
