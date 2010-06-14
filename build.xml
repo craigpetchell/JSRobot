@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<project name="JSRobot">
+<project name="JSRobot" default="jar">
 	
 	<target name="compile">
 		<mkdir dir="classes" />
@@ -12,5 +12,22 @@
 		</jar>
 		
 		<signjar jar="JSRobot.jar" alias="jsrobot" keystore="keystore" keypass="password" storepass="password" storetype="jks" />
+	</target>
+	
+	<target name="dist" depends="jar">
+		<zip destfile="JSRobot.zip">
+			<fileset dir=".">
+				<exclude name=".*/**" />
+				<exclude name=".*" />
+				<exclude name="bin/**" />
+				<exclude name="classes/**" />
+			</fileset>
+		</zip>
+	</target>
+	
+	<target name="clean">
+		<delete dir="classes" />
+		<delete file="JSRobot.jar" />
+		<delete file="JSRobot.zip" />
 	</target>
 </project>
