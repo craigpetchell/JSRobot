@@ -16,12 +16,12 @@
 	
 	<target name="dist" depends="jar">
 		<zip destfile="JSRobot.zip">
-			<fileset dir=".">
+			<zipfileset dir="." prefix="jsrobot">
 				<exclude name=".*/**" />
 				<exclude name=".*" />
 				<exclude name="bin/**" />
 				<exclude name="classes/**" />
-			</fileset>
+			</zipfileset>
 		</zip>
 	</target>
 	
