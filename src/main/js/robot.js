@@ -9,7 +9,8 @@ window.robot = {
 	},
 	
 	init: function() {
-		document.write('<applet cache_archive="../JSRobot.jar" cache_archive_ex="../JSRobot.jar" cache_option="Plugin" archive="../JSRobot.jar" code="com.ephox.jsrobot.JSRobot" id="robotApplet" width="10" height="10" mayscript="true"><param name="mayscript" value="true" /></applet>');
+		var jarUrl = "../JSRobot.jar";
+		document.write('<applet archive="' + jarUrl + '" code="com.ephox.jsrobot.JSRobot" id="robotApplet" width="10" height="10" mayscript="true"><param name="mayscript" value="true" /></applet>');
 		this.appletInstance = document.getElementById('robotApplet');
 	},
 	
@@ -23,6 +24,10 @@ window.robot = {
 	type: function(key, shiftKey, callback) {
 		this.getApplet().typeKey(this.getKeycode(key), shiftKey);
 		setTimeout(callback, 100);
+	},
+	
+	forwardDelete: function(callback) {
+		this.type(0x7F, false, callback);
 	},
 	
 	getKeycode: function(key) {

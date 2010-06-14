@@ -101,7 +101,8 @@
 					contentDocument.designMode = "On";
 				}
 				
-				function setupEditableIframe(callback) {
+				var frame;
+				function setupEditableIframe(content, callback) {
 					window.iframeLoaded = function(doc) {
 						// We need a timeout for Firefox compatibility. If the iframe isn't already on screen it just throws an error and painting can't happen until JavaScript stops running.
 						setTimeout(function() {
@@ -111,25 +112,46 @@
 							} else {
 								doc.designMode = "On";
 							}
+							doc.body.focus();
 							callback(doc);
 						}, 10);
 					}
-					var frame = document.createElement('iframe');
+					frame = document.createElement('iframe');
 					frame.height = '100';
 					frame.width = '100';
-					frame.src = 'javascript:document.open();document.domain="' + document.domain + '";document.write("<html><head></head><body></body></html>");document.close();window.parent.iframeLoaded(document);';
+					frame.src = 'javascript:document.open();document.domain="' + document.domain + '";document.write("<html><head></head><body>' + content + '</body></html>");document.close();window.parent.iframeLoaded(document);';
 					document.body.appendChild(frame);
 				}
 				
-				module('Typing in iframe with design mode');
+				module('Typing in iframe with design mode', {
+					teardown: function() {
+						if (frame) {
+							document.body.removeChild(frame);
+							frame = null;
+						}
+					}
+				});
 				
 				asyncTest('Typing simple character', function() {
 					expect(1);
-					setupEditableIframe(function(contentDocument) {
+					setupEditableIframe("", function(contentDocument) {
 						document.getElementById('nextFocus').focus();
 						robot.type('\t', false, function() {
 							robot.type('m', false, function() {
 								equals(contentDocument.body.innerHTML, 'm');
+								QUnit.start();
+							});
+						});
+					});
+				});
+				
+				asyncTest('Delete', function() {
+					expect(1);
+					setupEditableIframe("content", function(contentDocument) {
+						document.getElementById('nextFocus').focus();
+						robot.type('\t', false, function() {
+							robot.forwardDelete(function() {
+								equals(contentDocument.body.innerHTML, 'ontent');
 								QUnit.start();
 							});
 						});
