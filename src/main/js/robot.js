@@ -21,7 +21,6 @@ window.robot = {
 	},
 	
 	type: function(key, shiftKey, callback) {
-		shiftKey = !!shiftKey;
 		this.getApplet().typeKey(this.getKeycode(key), shiftKey);
 		setTimeout(callback, 10);
 	},
