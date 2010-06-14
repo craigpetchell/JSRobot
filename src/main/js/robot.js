@@ -22,12 +22,19 @@ window.robot = {
 	
 	type: function(key, shiftKey, callback) {
 		shiftKey = !!shiftKey;
-		this.getApplet().typeKey(key, shiftKey);
+		this.getApplet().typeKey(this.getKeycode(key), shiftKey);
 		setTimeout(callback, 10);
 	},
 	
+	getKeycode: function(key) {
+		if (key.toUpperCase && key.charCodeAt) {
+			return key.toUpperCase().charCodeAt(0);
+		}
+		return key;
+	},
+	
 	getApplet: function() {
-		return document.getElementById('robotApplet');
+		return this.appletInstance;
 	}
 };
 

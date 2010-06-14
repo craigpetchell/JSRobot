@@ -15,15 +15,22 @@
 					setup: function() { 
 		        		content = document.getElementById('content');
 						content.value = '';
+						content.focus();
 					}
 				});
 		        asyncTest('Simple character', function() {
-					content.focus();
 					robot.type(0x41, false, function() {
 						equals(content.value, 'a');
 						QUnit.start();
 					});
 		        });
+				
+				asyncTest('Converting from character to keycode', function() {
+					robot.type('f', false, function() {
+						equals(content.value, 'f');
+						QUnit.start();
+					});
+				});
 				
 				window.robot.onload(function() {
 					QUnit.setup();
