@@ -48,11 +48,35 @@
 				
 				test('Typing non-ascii character is forbidden (use directly key code instead)', function() {
 					try {
-						robot.type('\t', false);
+						robot.type('^', false);
 						ok(false, 'Should have thrown exception on invalid character.');
 					} catch (e) {
 						ok(true, 'Correctly threw exception on invalid character');
 					}
+				});
+				
+				asyncTest('Typing enter', function() {
+					robot.type('\n', false, function() {
+						ok(content.value =='\n' || content.value == '\r\n', 'Expected a line ending');
+						QUnit.start();
+					});
+				});
+				
+				asyncTest('Typing backspace', function() {
+					content.value = 'test';
+					content.select();
+					robot.type('\b', false, function() {
+						equals(content.value, '', 'Should have deleted content');
+						QUnit.start();
+					});
+				});
+				
+				asyncTest('Typing tab', function() {
+					robot.type('\t', false, function() {
+						equals(content.value, '', 'Should have moved focus instead of typing in text area');
+						equals(document.activeElement, document.getElementById('nextFocus'));
+						QUnit.start();
+					});
 				});
 				
 				window.robot.onload(function() {
@@ -69,6 +93,7 @@
 		<ol id="qunit-tests"></ol>
 		
 		<textarea id="content" rows="10" cols="80"></textarea>
+		<input type="text" value="Here for focus" id="nextFocus" />
 		<script type="text/javascript" language="JavaScript" src="../src/main/js/robot.js"></script>
     </body>
 	

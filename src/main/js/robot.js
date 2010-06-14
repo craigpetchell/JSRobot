@@ -27,7 +27,7 @@ window.robot = {
 	
 	getKeycode: function(key) {
 		if (key.toUpperCase && key.charCodeAt) {
-			if (/^[a-zA-Z]$/.test(key)) {
+			if (/^[a-zA-Z\n\b\t]$/.test(key)) {
 				return key.toUpperCase().charCodeAt(0);
 			} else {
 				throw { message: 'Invalid character to type. Must be a-z or A-Z, otherwise use the key code directly.' };
