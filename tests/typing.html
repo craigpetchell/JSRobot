@@ -118,8 +118,8 @@
 					frame = document.createElement('iframe');
 					frame.height = '100';
 					frame.width = '100';
-					frame.src = 'javascript:document.open();document.write("<html><head></head><body>' + content + '</body></html>");document.close();window.parent.iframeLoaded(document);';
 					document.body.appendChild(frame);
+					frame.src = 'javascript:document.open();document.write("<html><head></head><body>' + content + '</body></html>");document.close();window.parent.iframeLoaded(document);';
 				}
 				
 				module('Typing in iframe with design mode', {
