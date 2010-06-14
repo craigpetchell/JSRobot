@@ -11,6 +11,8 @@ import netscape.javascript.*;
 public class JSRobot extends Applet {
 
 	private static final long serialVersionUID = 1L;
+	
+	private boolean started = false;
 
 	public void init() {
 		System.err.println("Init");
@@ -24,14 +26,18 @@ public class JSRobot extends Applet {
 	}
 	
 	public void start() {
-		Timer t = new Timer();
-		t.schedule(new TimerTask() {
-			@Override
-			public void run() {
-				clickToFocusBrowser();
-				performCallback();
-			}
-		}, 100);
+		// Started can be called multiple times if the applet is hidden and shown again so we guard against that.
+		if (!started) {
+			started = true;
+			Timer t = new Timer();
+			t.schedule(new TimerTask() {
+				@Override
+				public void run() {
+					clickToFocusBrowser();
+					performCallback();
+				}
+			}, 100);
+		}
 	}
 	
 	private void clickToFocusBrowser() {
