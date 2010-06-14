@@ -1,0 +1,16 @@
+<?xml version="1.0" ?>
+<project name="JSRobot">
+	
+	<target name="compile">
+		<mkdir dir="classes" />
+		<javac target="1.5" source="1.5" srcdir="src/main/java" destdir="classes" classpath="lib/jsobject.jar" />
+	</target>
+	
+	<target name="jar" depends="compile">
+		<jar destfile="JSRobot.jar">
+			<fileset dir="classes" />
+		</jar>
+		
+		<signjar jar="JSRobot.jar" alias="jsrobot" keystore="keystore" keypass="password" storepass="password" storetype="jks" />
+	</target>
+</project>
