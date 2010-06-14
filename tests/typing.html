@@ -46,6 +46,15 @@
 					});
 				});
 				
+				test('Typing non-ascii character is forbidden (use directly key code instead)', function() {
+					try {
+						robot.type('\t', false);
+						ok(false, 'Should have thrown exception on invalid character.');
+					} catch (e) {
+						ok(true, 'Correctly threw exception on invalid character');
+					}
+				});
+				
 				window.robot.onload(function() {
 					QUnit.setup();
 				});
