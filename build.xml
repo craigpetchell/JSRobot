@@ -1,5 +1,4 @@
 <?xml version="1.0" ?>
-<!-- Copyright 2010 Ephox Corporation.  All rights reserved. -->
 <project name="JSRobot" default="jar">
 	
 	<target name="compile">
@@ -10,7 +9,6 @@
 	<target name="jar" depends="compile">
 		<jar destfile="JSRobot.jar">
 			<fileset dir="classes" />
-			<zipfileset dir="." includes="LICENSE" prefix="META-INF/" />
 		</jar>
 		
 		<signjar jar="JSRobot.jar" alias="jsrobot" keystore="keystore" keypass="password" storepass="password" storetype="jks" />
@@ -23,7 +21,6 @@
 				<exclude name=".*" />
 				<exclude name="bin/**" />
 				<exclude name="classes/**" />
-				<exclude name="JSRobot.zip" />
 			</zipfileset>
 		</zip>
 	</target>
