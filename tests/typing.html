@@ -65,7 +65,7 @@
 				asyncTest('Typing enter', function() {
 					expect(1);
 					robot.type('\n', false, function() {
-						ok(content.value =='\n' || content.value == '\r\n', 'Expected a line ending and got:' + content.value + ":");
+						ok(content.value =='\n' || content.value == '\r\n', 'Expected a line ending and got:' + content.value + ": Focus is on: " + document.activeElement);
 						QUnit.start();
 					});
 				});
