@@ -84,14 +84,14 @@ public class JSRobot extends Applet {
 		js.eval("window.robot.callback()");
 	}
 	
-	public boolean typeKey(final int keycode, final boolean shiftKey) {
+	public String typeKey(final int keycode, final boolean shiftKey) {
 		try {
 			doTypeKey(keycode, shiftKey);
 			waitForIdle();
-			return true;
+			return null;
 		} catch (Throwable t) {
 			t.printStackTrace();
-			return false;
+			return t.getMessage();
 		}
 	}
 
