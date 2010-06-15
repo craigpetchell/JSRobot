@@ -5,8 +5,12 @@ package com.ephox.jsrobot;
 import java.applet.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.*;
+import java.io.*;
 import java.security.*;
 import java.util.*;
+
+import javax.imageio.*;
 
 import netscape.javascript.*;
 
@@ -17,6 +21,8 @@ public class JSRobot extends Applet {
 	private boolean started = false;
 
 	private Robot robot;
+
+	private File _screenshotDir;
 	
 	public void init() {
 		System.err.println("Init");
@@ -104,6 +110,23 @@ public class JSRobot extends Applet {
 		robot.keyRelease(keycode);
 		if (shiftKey) {
 			robot.keyRelease(KeyEvent.VK_SHIFT);
+		}
+	}
+	
+	public void setScreenShotDirectory(String dir) {
+		_screenshotDir = new File(dir);
+	}
+	
+	public String captureScreenShot() {
+		try {
+		     Robot robot = getRobot();
+		     BufferedImage screenshot = robot.createScreenCapture(getGraphicsConfiguration().getBounds());
+		     File outputFile = File.createTempFile("TestScreenshot", ".png", _screenshotDir);
+		     ImageIO.write(screenshot, "png", outputFile);
+		     return outputFile.getAbsolutePath();
+		} catch (Throwable t) {
+			t.printStackTrace();
+			return t.getMessage();
 		}
 	}
 }
