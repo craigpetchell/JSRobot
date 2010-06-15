@@ -16,7 +16,7 @@
 		},
 		
 		init: function() {
-			var jarUrl = "/jsunit/JSRobot/JSRobot.jar";
+			var jarUrl = "../JSRobot.jar";
 			document.write('<applet archive="' + jarUrl + '" code="com.ephox.jsrobot.JSRobot" id="robotApplet" width="10" height="10" mayscript="true"><param name="mayscript" value="true" /></applet>');
 			this.appletInstance = document.getElementById('robotApplet');
 		},
