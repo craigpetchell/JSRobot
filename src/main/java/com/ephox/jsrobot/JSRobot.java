@@ -14,6 +14,8 @@ public class JSRobot extends Applet {
 	
 	private boolean started = false;
 
+	private Robot robot;
+	
 	public void init() {
 		System.err.println("Init");
 		System.setSecurityManager(new SecurityManager() {
@@ -28,20 +30,35 @@ public class JSRobot extends Applet {
 		// Started can be called multiple times if the applet is hidden and shown again so we guard against that.
 		if (!started) {
 			started = true;
-			Timer t = new Timer();
+			final Timer t = new Timer();
 			t.schedule(new TimerTask() {
+				private int attempts = 0;
 				@Override
 				public void run() {
+					if (!isShowing() && attempts < 50) {
+						attempts++;
+						t.schedule(this, 100);
+						return;
+					}
 					clickToFocusBrowser();
+					waitForIdle();
 					performCallback();
 				}
 			}, 100);
 		}
 	}
 	
+	private void waitForIdle() {
+		try {
+			getRobot().waitForIdle();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	private void clickToFocusBrowser() {
 		try {
-			Robot robot = new Robot();
+			Robot robot = getRobot();
 			Point p = getLocationOnScreen();
 			System.err.println(p);
 			robot.mouseMove(p.x, p.y - 5);
@@ -50,6 +67,13 @@ public class JSRobot extends Applet {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	private synchronized Robot getRobot() throws AWTException {
+		if (robot == null) {
+			robot = new Robot();
+		}
+		return robot;
 	}
 	
 	private void performCallback() {
@@ -61,6 +85,7 @@ public class JSRobot extends Applet {
 	public boolean typeKey(final int keycode, final boolean shiftKey) {
 		try {
 			doTypeKey(keycode, shiftKey);
+			waitForIdle();
 			return true;
 		} catch (Throwable t) {
 			t.printStackTrace();
@@ -69,7 +94,7 @@ public class JSRobot extends Applet {
 	}
 
 	private void doTypeKey(int keycode, boolean shiftKey) throws AWTException {
-		Robot robot = new Robot();
+		Robot robot = getRobot();
 		if (shiftKey) {
 			robot.keyPress(KeyEvent.VK_SHIFT);
 		}
