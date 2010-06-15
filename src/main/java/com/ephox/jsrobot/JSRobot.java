@@ -1,3 +1,5 @@
+/* Copyright 2010 Ephox Corporation.  All rights reserved. */
+
 package com.ephox.jsrobot;
 
 import java.applet.*;

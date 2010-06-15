@@ -1,3 +1,4 @@
+/* Copyright 2010 Ephox Corporation.  All rights reserved. */
 window.robot = {
 		
 	onload: function(userCallback) {
