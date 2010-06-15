@@ -23,7 +23,10 @@ window.robot = {
 	},
 	
 	type: function(key, shiftKey, callback) {
-		this.getApplet().typeKey(this.getKeycode(key), shiftKey);
+		var typed = this.getApplet().typeKey(this.getKeycode(key), shiftKey);
+		if (!typed) {
+			throw { message: "JSRobot failed to type the requested key. Check the Java console." };
+		}
 		setTimeout(callback, 100);
 	},
 	
