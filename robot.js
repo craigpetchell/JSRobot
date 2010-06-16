@@ -16,7 +16,15 @@
 		},
 		
 		init: function() {
-			var jarUrl = "../JSRobot.jar";
+			var jarUrl = "JSRobot.jar";
+			var scripts = document.getElementsByTagName('script');
+			for (var i = 0; i < scripts.length; i++) {
+				var src = scripts[i].src;
+				var regex = /^(.*\/?)robot.js(\?|$)/;
+				if (src && regex.test(src)) {
+					jarUrl = regex.exec(src)[1] + "JSRobot.jar";
+				}
+			}
 			document.write('<applet archive="' + jarUrl + '" code="com.ephox.jsrobot.JSRobot" id="robotApplet" width="10" height="10" mayscript="true"><param name="mayscript" value="true" /></applet>');
 			this.appletInstance = document.getElementById('robotApplet');
 		},
