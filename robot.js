@@ -74,7 +74,7 @@
 			return key;
 		},
 		
-		captureScreenShot: function(key) {
+		captureScreenShot: function() {
 			return this.getApplet().captureScreenShot();
 		},
 		
