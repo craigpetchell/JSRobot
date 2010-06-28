@@ -4,7 +4,7 @@ A testing utility for web-apps that can generate real keystrokes rather than sim
 
 Documentation
 -------------
-For documentation on how to use JSRobot see http://tinymce.ephox.com/jsrobot
+For documentation on how to use JSRobot refer to the [JSRobot website](http://tinymce.ephox.com/jsrobot).
 
 Building
 --------
