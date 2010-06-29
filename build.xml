@@ -48,6 +48,6 @@
 	<target name="clean">
 		<delete dir="classes" />
 		<delete file="JSRobot.jar" />
-		<delete file="JSRobot.zip" />
+		<delete file="JSRobot*.zip" />
 	</target>
 </project>
