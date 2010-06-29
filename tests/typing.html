@@ -114,8 +114,9 @@
 					robot.copy(function() {
 						equals(content.value, 'copy', 'Copy content from field.');
 						content.value = 'start';
+						content.select();
 						robot.paste(function() {
-							equals(content.value, 'startcopy', 'Paste content back in.');
+							equals(content.value, 'copy', 'Paste content back in.');
 							QUnit.start();
 						});
 					});
