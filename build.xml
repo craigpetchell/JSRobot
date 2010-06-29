@@ -31,13 +31,16 @@
 	</target>
 	
 	<target name="dist" depends="jar">
-		<zip destfile="JSRobot.zip">
+		<tstamp>
+			<format locale="en,US" timezone="GMT" property="timestamp" pattern="yyyy-MM-dd"/>
+		</tstamp>
+		<zip destfile="JSRobot-${timestamp}.zip">
 			<zipfileset dir="." prefix="jsrobot">
 				<exclude name=".*/**" />
 				<exclude name=".*" />
 				<exclude name="bin/**" />
 				<exclude name="classes/**" />
-				<exclude name="JSRobot.zip" />
+				<exclude name="JSRobot*.zip" />
 			</zipfileset>
 		</zip>
 	</target>
