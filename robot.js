@@ -52,15 +52,27 @@
 		
 		type: function(key, shiftKey, callback) {
 			shiftKey = !!shiftKey;
-			var errorMessage = this.getApplet().typeKey(this.getKeycode(key), shiftKey);
-			if (errorMessage) {
-				throw { message: "JSRobot failed to type the requested key: " + errorMessage };
-			}
-			setTimeout(callback, 100);
+			this.appletAction(this.getApplet().typeKey(this.getKeycode(key), shiftKey), callback);
 		},
 		
 		forwardDelete: function(callback) {
 			this.type(0x7F, false, callback);
+		},
+		
+		cut: function(callback) {
+			this.typeAsShortcut('x', callback);
+		},
+		
+		copy: function(callback) {
+			this.typeAsShortcut('c', callback);
+		},
+		
+		paste: function(callback) {
+			this.typeAsShortcut('v', callback);
+		},
+		
+		typeAsShortcut: function(key, callback) {
+			this.appletAction(this.getApplet().typeAsShortcut(this.getKeycode(key)), callback);
 		},
 		
 		getKeycode: function(key) {
@@ -84,6 +96,13 @@
 		
 		getApplet: function() {
 			return this.appletInstance;
+		},
+		
+		appletAction: function(actionResult, callback) {
+			if (actionResult) {
+				throw { message: "JSRobot error: " + actionResult };
+			}
+			setTimeout(callback, 100);
 		}
 	};
 	

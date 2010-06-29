@@ -94,6 +94,33 @@
 					});
 				});
 				
+				asyncTest('Cut and paste', function() {
+					expect(2);
+					content.value = 'test';
+					content.select();
+					robot.cut(function() {
+						equals(content.value, '', 'Cut content from field.');
+						robot.paste(function() {
+							equals(content.value, 'test', 'Paste content back in.');
+							QUnit.start();
+						});
+					});
+				});
+				
+				asyncTest('Copy and paste', function() {
+					expect(2);
+					content.value = 'copy';
+					content.select();
+					robot.copy(function() {
+						equals(content.value, 'copy', 'Copy content from field.');
+						content.value = 'start';
+						robot.paste(function() {
+							equals(content.value, 'startcopy', 'Paste content back in.');
+							QUnit.start();
+						});
+					});
+				});
+				
 				if (document.activeElement) {
 					asyncTest('Typing tab', function() {
 						expect(2);

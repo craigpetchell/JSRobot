@@ -104,8 +104,24 @@ public class JSRobot extends Applet {
 	}
 	
 	public String typeKey(final int keycode, final boolean shiftKey) {
+		return doTypeKey(keycode, shiftKey ? KeyEvent.VK_SHIFT : -1);
+	}
+	
+	public String typeAsShortcut(int keycode) {
+		return doTypeKey(keycode, getShortcutKey());
+	}
+	
+	private String doTypeKey(int keycode, int modifierKey) {
 		try {
-			doTypeKey(keycode, shiftKey);
+			Robot robot = getRobot();
+			if (modifierKey >= 0) {
+				robot.keyPress(modifierKey);
+			}
+			robot.keyPress(keycode);
+			robot.keyRelease(keycode);
+			if (modifierKey >= 0) {
+				robot.keyRelease(modifierKey);
+			}
 			waitForIdle();
 			return null;
 		} catch (Throwable t) {
@@ -114,15 +130,18 @@ public class JSRobot extends Applet {
 		}
 	}
 
-	private void doTypeKey(int keycode, boolean shiftKey) throws AWTException {
-		Robot robot = getRobot();
-		if (shiftKey) {
-			robot.keyPress(KeyEvent.VK_SHIFT);
-		}
-		robot.keyPress(keycode);
-		robot.keyRelease(keycode);
-		if (shiftKey) {
-			robot.keyRelease(KeyEvent.VK_SHIFT);
+	private int getShortcutKey() {
+		switch (getToolkit().getMenuShortcutKeyMask()) {
+			case KeyEvent.CTRL_MASK:
+				return KeyEvent.VK_CONTROL;
+			case KeyEvent.META_MASK:
+				return KeyEvent.VK_META;
+			case KeyEvent.ALT_MASK:
+				return KeyEvent.VK_ALT;
+			case KeyEvent.ALT_GRAPH_MASK:
+				return KeyEvent.VK_ALT_GRAPH;
+			default:
+				throw new IllegalStateException("Menu shortcut key is unrecognised: "+ getToolkit().getMenuShortcutKeyMask());
 		}
 	}
 	
