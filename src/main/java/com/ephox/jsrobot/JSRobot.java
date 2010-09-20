@@ -22,8 +22,10 @@ import java.awt.image.*;
 import java.io.*;
 import java.security.*;
 import java.util.*;
+import java.util.Timer;
 
 import javax.imageio.*;
+import javax.swing.*;
 
 import netscape.javascript.*;
 
@@ -58,6 +60,7 @@ public class JSRobot extends Applet {
 				public void run() {
 					if (!isShowing() && attempts < 50) {
 						attempts++;
+						checkNotMinimized();
 						t.schedule(this, 100);
 						return;
 					}
@@ -66,6 +69,21 @@ public class JSRobot extends Applet {
 					performCallback();
 				}
 			}, 100);
+		}
+	}
+	
+	protected void checkNotMinimized() {
+		Container parent = getParent();
+		while (!(parent instanceof Frame) && parent != null) {
+			parent = parent.getParent();
+		}
+		if (parent != null) {
+			Frame window = (Frame)parent;
+			if (window.getExtendedState() == JFrame.ICONIFIED) {
+				window.setExtendedState(JFrame.MAXIMIZED_BOTH);
+			}
+		} else {
+			System.err.println("Failed to get a containing frame.");
 		}
 	}
 	
