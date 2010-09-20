@@ -69,6 +69,17 @@ public class JSRobot extends Applet {
 		}
 	}
 	
+	public String setClipboard(String contentType, String content) {
+		try {
+			ClipboardHelper helper = new ClipboardHelper(contentType, content);
+			Toolkit.getDefaultToolkit().getSystemClipboard().setContents(helper, helper);
+			return null;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return e.getMessage();
+		}
+	}
+	
 	private void waitForIdle() {
 		try {
 			getRobot().waitForIdle();

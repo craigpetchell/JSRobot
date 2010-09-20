@@ -71,6 +71,14 @@
 			this.typeAsShortcut('v', callback);
 		},
 		
+		pasteContent: function(type, content, callback) {
+			var actionResult = this.getApplet().setClipboard(type, content);
+			if (actionResult) {
+				throw { message: "JSRobot error: " + actionResult };
+			}
+			this.paste(callback);
+		},
+		
 		typeAsShortcut: function(key, callback) {
 			this.appletAction(this.getApplet().typeAsShortcut(this.getKeycode(key)), callback);
 		},

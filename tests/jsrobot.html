@@ -16,7 +16,7 @@
    limitations under the License.
    -->
     <head>
-    	<title>Unit tests for typing</title>
+    	<title>Unit tests for JSRobot</title>
 		<script type="text/javascript" src="http://www.google.com/jsapi"></script>
 		<script type="text/javascript">
 			google.load("jquery", "1.3");
@@ -121,6 +121,32 @@
 						});
 					});
 				});
+
+				asyncTest('Paste provided content', function() {
+					expect(1);
+					content.value = '';
+					content.select();
+					robot.pasteContent('text/plain', 'Hello World', function() {
+						equals(content.value, 'Hello World', 'Paste provided content into field.');
+						QUnit.start();
+					});
+				});
+
+				if (!/Firefox\/2/.test(navigator.userAgent)) {
+					asyncTest('Paste provided HTML content', function() {
+						expect(1);
+						var editable = document.getElementById("editable");
+						editable.focus();
+						robot.pasteContent('text/html', '<p>Hello <b>World</b></p>', function() {
+							equals(editable.innerHTML.toLowerCase(), '<p>hello <b>world</b></p>', 'Paste provided content into field.');
+							QUnit.start();
+						});
+					});
+				} else {
+					test("SKIPPED: Paste provided HTML content", function() {
+						ok(true, "FireFox 2 doesn't support the contenteditable attribute so skipping this test.");
+					});
+				}
 				
 				if (document.activeElement) {
 					asyncTest('Typing tab', function() {
@@ -207,14 +233,17 @@
         </script>
     </head>
     <body>
-        <h1 id="qunit-header">Unit tests for typing</h1>
+        <h1 id="qunit-header">Unit tests for JSRobot</h1>
 		<h2 id="qunit-banner"></h2>
 		<div id="qunit-testrunner-toolbar"></div>
 		<h2 id="qunit-userAgent"></h2>
 		<ol id="qunit-tests"></ol>
 		
+		<div id="editable" contenteditable="true" style="width: 200px; height: 200px; border: 1px solid red;"></div>
+		
 		<textarea id="content" rows="10" cols="80"></textarea>
 		<input type="text" value="Here for focus" id="nextFocus" />
+		
 		
 		<script type="text/javascript" language="JavaScript" src="../robot.js"></script>
     </body>
