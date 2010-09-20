@@ -132,22 +132,6 @@
 					});
 				});
 
-				if (!/Firefox\/2/.test(navigator.userAgent)) {
-					asyncTest('Paste provided HTML content', function() {
-						expect(1);
-						var editable = document.getElementById("editable");
-						editable.focus();
-						robot.pasteContent('text/html', '<p>Hello <b>World</b></p>', function() {
-							equals(editable.innerHTML.toLowerCase(), '<p>hello <b>world</b></p>', 'Paste provided content into field.');
-							QUnit.start();
-						});
-					});
-				} else {
-					test("SKIPPED: Paste provided HTML content", function() {
-						ok(true, "FireFox 2 doesn't support the contenteditable attribute so skipping this test.");
-					});
-				}
-				
 				if (document.activeElement) {
 					asyncTest('Typing tab', function() {
 						expect(2);
