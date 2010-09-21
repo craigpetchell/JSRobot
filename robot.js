@@ -71,8 +71,8 @@
 			this.typeAsShortcut('v', callback);
 		},
 		
-		pasteContent: function(type, content, callback) {
-			var actionResult = this.getApplet().setClipboard(type, content);
+		pasteText: function(content, callback) {
+			var actionResult = this.getApplet().setClipboard(content);
 			if (actionResult) {
 				throw { message: "JSRobot error: " + actionResult };
 			}

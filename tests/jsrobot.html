@@ -126,7 +126,7 @@
 					expect(1);
 					content.value = '';
 					content.select();
-					robot.pasteContent('text/plain', 'Hello World', function() {
+					robot.pasteText('Hello World', function() {
 						equals(content.value, 'Hello World', 'Paste provided content into field.');
 						QUnit.start();
 					});

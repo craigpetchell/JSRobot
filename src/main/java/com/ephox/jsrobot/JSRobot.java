@@ -17,6 +17,7 @@ package com.ephox.jsrobot;
 
 import java.applet.*;
 import java.awt.*;
+import java.awt.datatransfer.*;
 import java.awt.event.*;
 import java.awt.image.*;
 import java.io.*;
@@ -87,10 +88,10 @@ public class JSRobot extends Applet {
 		}
 	}
 	
-	public String setClipboard(String contentType, String content) {
+	public String setClipboard(String content) {
 		try {
-			ClipboardHelper helper = new ClipboardHelper(contentType, content);
-			Toolkit.getDefaultToolkit().getSystemClipboard().setContents(helper, helper);
+			StringSelection transferable = new StringSelection(content);
+			Toolkit.getDefaultToolkit().getSystemClipboard().setContents(transferable, null);
 			return null;
 		} catch (Exception e) {
 			e.printStackTrace();
