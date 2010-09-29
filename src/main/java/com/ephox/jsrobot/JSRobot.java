@@ -22,8 +22,6 @@ import java.awt.event.*;
 import java.awt.image.*;
 import java.io.*;
 import java.security.*;
-import java.util.*;
-import java.util.Timer;
 
 import javax.imageio.*;
 import javax.swing.*;
@@ -51,25 +49,29 @@ public class JSRobot extends Applet {
 	}
 	
 	public void start() {
+		System.err.println("Start");
 		// Started can be called multiple times if the applet is hidden and shown again so we guard against that.
 		if (!started) {
 			started = true;
-			final Timer t = new Timer();
-			t.schedule(new TimerTask() {
+			final Timer t = new Timer(100, new ActionListener() {
 				private int attempts = 0;
 				@Override
-				public void run() {
+				public void actionPerformed(ActionEvent e) {
 					if (!isShowing() && attempts < 50) {
 						attempts++;
 						checkNotMinimized();
-						t.schedule(this, 100);
 						return;
 					}
+					((Timer)e.getSource()).stop();
 					clickToFocusBrowser();
-					waitForIdle();
-					performCallback();
+					SwingUtilities.invokeLater(new Runnable() {
+						public void run() {
+							performCallback();	
+						}
+					});
 				}
-			}, 100);
+			});
+			t.start();
 		}
 	}
 	
@@ -89,6 +91,7 @@ public class JSRobot extends Applet {
 	}
 	
 	public String setClipboard(String content) {
+		System.err.println("Set clipboard");
 		try {
 			StringSelection transferable = new StringSelection(content);
 			Toolkit.getDefaultToolkit().getSystemClipboard().setContents(transferable, null);
@@ -100,6 +103,7 @@ public class JSRobot extends Applet {
 	}
 	
 	private void waitForIdle() {
+		System.err.println("Wait for idle");
 		try {
 			getRobot().waitForIdle();
 		} catch (Exception e) {
@@ -108,6 +112,7 @@ public class JSRobot extends Applet {
 	}
 	
 	private void clickToFocusBrowser() {
+		System.err.println("Click to focus browser.");
 		try {
 			Robot robot = getRobot();
 			Point p = getLocationOnScreen();
@@ -130,7 +135,7 @@ public class JSRobot extends Applet {
 	private void performCallback() {
 		System.err.println("Perform callback");
 		JSObject js = JSObject.getWindow(this);
-		js.eval("window.robot.callback()");
+		System.err.println(js.eval("window.robot.callback()"));
 	}
 	
 	public String typeKey(final int keycode, final boolean shiftKey) {

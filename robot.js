@@ -46,8 +46,9 @@
 		callback: function() {
 			this.ready = true;
 			if (this.userCallback) {
-				this.userCallback();
+				setTimeout(this.userCallback, 100);
 			}
+			return "Callback received.";
 		},
 		
 		type: function(key, shiftKey, callback) {
