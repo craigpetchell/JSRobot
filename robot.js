@@ -29,7 +29,7 @@
 			}
 		},
 		
-		init: function() {
+		init: function(useDocumentWrite) {
 			var jarUrl = "JSRobot.jar";
 			var scripts = document.getElementsByTagName('script');
 			for (var i = 0; i < scripts.length; i++) {
@@ -39,7 +39,14 @@
 					jarUrl = regex.exec(src)[1] + "JSRobot.jar";
 				}
 			}
-			document.write('<applet archive="' + jarUrl + '" code="com.ephox.jsrobot.JSRobot" id="robotApplet" width="10" height="10" mayscript="true"><param name="mayscript" value="true" /></applet>');
+			var appletTag = '<applet archive="' + jarUrl + '" code="com.ephox.jsrobot.JSRobot" id="robotApplet" width="10" height="10" mayscript="true"><param name="mayscript" value="true" /></applet>';
+			if (useDocumentWrite) {
+				document.write(appletTag);
+			} else {
+				var div = document.createElement('div');
+				document.body.appendChild(div);
+				div.innerHTML = appletTag;
+			}
 			this.appletInstance = document.getElementById('robotApplet');
 		},
 		
@@ -115,5 +122,13 @@
 		}
 	};
 	
-	window.robot.init();
+	function robotOnload() {
+		window.robot.init();
+	}
+	if (document.addEventListener) {
+		window.addEventListener('load', robotOnload, true);
+	} else {
+		// If you don't init straight away on IE, it gets the applet context wrong.
+		window.robot.init(true);
+	}
 })();

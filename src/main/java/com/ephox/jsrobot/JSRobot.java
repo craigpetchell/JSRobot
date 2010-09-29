@@ -64,11 +64,12 @@ public class JSRobot extends Applet {
 					}
 					((Timer)e.getSource()).stop();
 					clickToFocusBrowser();
-					SwingUtilities.invokeLater(new Runnable() {
+					new Thread(new Runnable() {
 						public void run() {
+							waitForIdle();
 							performCallback();	
 						}
-					});
+					}).start();
 				}
 			});
 			t.start();
@@ -135,7 +136,9 @@ public class JSRobot extends Applet {
 	private void performCallback() {
 		System.err.println("Perform callback");
 		JSObject js = JSObject.getWindow(this);
+		System.err.println("Got window");
 		System.err.println(js.eval("window.robot.callback()"));
+		System.err.println("Finished performing callback");
 	}
 	
 	public String typeKey(final int keycode, final boolean shiftKey) {
@@ -146,8 +149,9 @@ public class JSRobot extends Applet {
 		return doTypeKey(keycode, getShortcutKey());
 	}
 	
-	private String doTypeKey(int keycode, int modifierKey) {
+	private String doTypeKey(final int keycode, final int modifierKey) {
 		try {
+			System.err.println("Typing key");
 			Robot robot = getRobot();
 			if (modifierKey >= 0) {
 				robot.keyPress(modifierKey);
