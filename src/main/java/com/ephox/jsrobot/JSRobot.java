@@ -192,8 +192,8 @@ public class JSRobot extends Applet {
 		try {
 		     Robot robot = getRobot();
 		     BufferedImage screenshot = robot.createScreenCapture(getGraphicsConfiguration().getBounds());
-		     File outputFile = File.createTempFile("TestScreenshot", ".png", _screenshotDir);
-		     ImageIO.write(screenshot, "png", outputFile);
+		     File outputFile = File.createTempFile("TestScreenshot", ".jpg", _screenshotDir);
+		     ImageIO.write(screenshot, "jpg", outputFile);
 		     return outputFile.getAbsolutePath();
 		} catch (Throwable t) {
 			t.printStackTrace();
