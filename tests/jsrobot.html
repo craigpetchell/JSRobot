@@ -207,6 +207,18 @@
 						}
 					}
 				});
+
+				asyncTest('Typing simple character with focus element', function() {
+					expect(1);
+					setupEditableIframe("", function(contentDocument) {
+						var p = contentDocument.getElementById('me');
+						frame.focus();
+						robot.type('m', false, function() {
+							equals(contentDocument.body.innerHTML, 'm');
+							QUnit.start();
+						}, contentDocument.body);
+					});
+				});
 				
 				asyncTest('Typing simple character', function() {
 					expect(1);

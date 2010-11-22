@@ -128,7 +128,7 @@
 				var i;
 				for (i = 0; i < listenerTypes.length; i++) {
 					if (focusElement.addEventListener) {
-						focusElement[add ? 'addEventListener' : 'removeEventListener'](listenerTypes[i], listener, true);
+						focusElement.ownerDocument[add ? 'addEventListener' : 'removeEventListener'](listenerTypes[i], listener, true);
 					} else {
 						focusElement[add ? 'attachEvent' : 'detachEvent']('on' + listenerTypes[i], listener);
 					}
