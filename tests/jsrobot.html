@@ -154,18 +154,23 @@
 					}, content);
 				});
 
-				if (document.activeElement) {
-					asyncTest('Typing tab', function() {
-						expect(2);
-						robot.type('\t', false, function(){
-							equals(content.value, '', 'Should have moved focus instead of typing in text area');
-							equals(document.activeElement, document.getElementById('nextFocus'));
+				asyncTest('Typing tab', function() {
+					expect(2);
+					var events = 0, checkDone = function() {
+						events++;
+						if (events === 2) {
 							QUnit.start();
-						}, content);
+						}
+					};
+					$('#nextFocus').focus(function() {
+						ok(true, 'Focus moved to next element');
+						checkDone();
 					});
-				} else {
-					test('Skipping tab test because browser has no document.activeElement support', function() {});
-				}
+					robot.type('\t', false, function() {
+						equals(content.value, '', 'Should have moved focus instead of typing in text area');
+						checkDone();
+					}, content);
+				});
 				
 				function getFrameDocument(content) {
 					contentDocument = (content.contentWindow || content.contentDocument);
