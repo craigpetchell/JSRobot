@@ -134,6 +134,11 @@
 					focusElement[add ? 'attachEvent' : 'detachEvent']('on' + listenerType, listener);
 				}
 			};
+			
+			focusElement = focusElement || document.activeElement;
+			if (focusElement && focusElement.contentWindow) {
+				focusElement = focusElement.contentWindow.document.activeElement;
+			}
 			if (focusElement) {
 				focusElement.focus();
 				doListeners(true);

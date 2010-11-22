@@ -224,12 +224,14 @@
 				asyncTest('Typing simple character', function() {
 					expect(1);
 					setupEditableIframe("", function(contentDocument) {
-						document.getElementById('nextFocus').focus();
-						robot.type('\t', false, function() {
-							robot.type('m', false, function() {
-								equals(contentDocument.body.innerHTML, 'm');
-								QUnit.start();
-							});
+						frame.focus();
+						if (frame.contentWindow) {
+							frame.contentWindow.focus();
+						}
+						contentDocument.body.focus();
+						robot.type('m', false, function() {
+							equals(contentDocument.body.innerHTML, 'm');
+							QUnit.start();
 						});
 					});
 				});
@@ -237,12 +239,14 @@
 				asyncTest('Delete', function() {
 					expect(1);
 					setupEditableIframe("content", function(contentDocument) {
-						document.getElementById('nextFocus').focus();
-						robot.type('\t', false, function() {
-							robot.forwardDelete(function() {
-								equals(contentDocument.body.innerHTML, 'ontent');
-								QUnit.start();
-							});
+						frame.focus();
+						if (frame.contentWindow) {
+							frame.contentWindow.focus();
+						}
+						contentDocument.body.focus();
+						robot.forwardDelete(function() {
+							equals(contentDocument.body.innerHTML, 'ontent');
+							QUnit.start();
 						});
 					});
 				});
