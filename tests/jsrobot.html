@@ -213,6 +213,9 @@
 					setupEditableIframe("", function(contentDocument) {
 						var p = contentDocument.getElementById('me');
 						frame.focus();
+						if (frame.contentWindow) {
+							frame.contentWindow.focus();
+						}
 						robot.type('m', false, function() {
 							equals(contentDocument.body.innerHTML, 'm');
 							QUnit.start();
