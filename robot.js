@@ -70,15 +70,15 @@
 		},
 		
 		cut: function(callback, focusElement) {
-			this.typeAsShortcut('x', callback, focusElement);
+			this.typeAsShortcut('x', callback, focusElement, 'cut');
 		},
 		
 		copy: function(callback, focusElement) {
-			this.typeAsShortcut('c', callback, focusElement);
+			this.typeAsShortcut('c', callback, focusElement, 'copy');
 		},
 		
 		paste: function(callback, focusElement) {
-			this.typeAsShortcut('v', callback, focusElement);
+			this.typeAsShortcut('v', callback, focusElement, 'paste');
 		},
 		
 		pasteText: function(content, callback, focusElement) {
@@ -89,10 +89,10 @@
 			this.paste(callback, focusElement);
 		},
 		
-		typeAsShortcut: function(key, callback, focusElement) {
+		typeAsShortcut: function(key, callback, focusElement, event) {
 			this.appletAction(focusElement, callback, function() {
 				return this.getApplet().typeAsShortcut(this.getKeycode(key));
-			});
+			}, event);
 		},
 		
 		getKeycode: function(key) {
@@ -118,25 +118,32 @@
 			return this.appletInstance;
 		},
 		
-		appletAction: function(focusElement, continueCallback, action) {
-			var actionResult, listenerTypes = [ 'keyup', 'paste', 'cut' ];
+		appletAction: function(focusElement, continueCallback, action, event) {
+			var actionResult, listenerActivated = false, listenerType = event || 'keyup', timeout;
 			var listener = function() {
+				if (listenerActivated) return;
+				listenerActivated = true;
+				clearTimeout(timeout);
 				doListeners(false);
 				setTimeout(continueCallback, 0);
 			};
 			var doListeners = function(add) {
-				var i;
-				for (i = 0; i < listenerTypes.length; i++) {
-					if (focusElement.addEventListener) {
-						focusElement.ownerDocument[add ? 'addEventListener' : 'removeEventListener'](listenerTypes[i], listener, true);
-					} else {
-						focusElement[add ? 'attachEvent' : 'detachEvent']('on' + listenerTypes[i], listener);
-					}
+				if (focusElement.addEventListener) {
+					focusElement.ownerDocument[add ? 'addEventListener' : 'removeEventListener'](listenerType, listener, true);
+				} else {
+					focusElement[add ? 'attachEvent' : 'detachEvent']('on' + listenerType, listener);
 				}
 			};
 			if (focusElement) {
 				focusElement.focus();
 				doListeners(true);
+
+				// Add a timeout of 5 seconds in case the target event isn't supported or something goes wrong.
+				timeout = setTimeout(function() {
+					if (!listenerActivated) {
+						continueCallback();
+					}
+				}, 5000);
 			}
 			actionResult = action.apply(this);
 			if (actionResult) {
