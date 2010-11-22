@@ -60,8 +60,8 @@
 		
 		type: function(key, shiftKey, callback, focusElement) {
 			shiftKey = !!shiftKey;
-			this.focus(focusElement, function() {
-				this.appletAction(this.getApplet().typeKey(this.getKeycode(key), shiftKey), callback);
+			this.appletAction(focusElement, callback, function() {
+				return this.getApplet().typeKey(this.getKeycode(key), shiftKey);
 			});
 		},
 		
@@ -90,8 +90,8 @@
 		},
 		
 		typeAsShortcut: function(key, callback, focusElement) {
-			this.focus(focusElement, function() {
-				this.appletAction(this.getApplet().typeAsShortcut(this.getKeycode(key)), callback);
+			this.appletAction(focusElement, callback, function() {
+				return this.getApplet().typeAsShortcut(this.getKeycode(key));
 			});
 		},
 		
@@ -118,16 +118,16 @@
 			return this.appletInstance;
 		},
 		
-		focus: function(focusElement, callback) {
-			if (focusElement) focusElement.focus();
-			callback.apply(this);
-		},
-		
-		appletAction: function(actionResult, callback) {
+		appletAction: function(focusElement, continueCallback, action) {
+			var actionResult;
+			if (focusElement) {
+				focusElement.focus();
+			}
+			actionResult = action.apply(this);
 			if (actionResult) {
 				throw { message: "JSRobot error: " + actionResult };
 			}
-			setTimeout(callback, 100);
+			setTimeout(continueCallback, 100);
 		}
 	};
 	
