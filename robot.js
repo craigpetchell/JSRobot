@@ -58,37 +58,41 @@
 			return "Callback received.";
 		},
 		
-		type: function(key, shiftKey, callback) {
+		type: function(key, shiftKey, callback, focusElement) {
 			shiftKey = !!shiftKey;
-			this.appletAction(this.getApplet().typeKey(this.getKeycode(key), shiftKey), callback);
+			this.focus(focusElement, function() {
+				this.appletAction(this.getApplet().typeKey(this.getKeycode(key), shiftKey), callback);
+			});
 		},
 		
-		forwardDelete: function(callback) {
-			this.type(0x7F, false, callback);
+		forwardDelete: function(callback, focusElement) {
+			this.type(0x7F, false, callback, focusElement);
 		},
 		
-		cut: function(callback) {
-			this.typeAsShortcut('x', callback);
+		cut: function(callback, focusElement) {
+			this.typeAsShortcut('x', callback, focusElement);
 		},
 		
-		copy: function(callback) {
-			this.typeAsShortcut('c', callback);
+		copy: function(callback, focusElement) {
+			this.typeAsShortcut('c', callback, focusElement);
 		},
 		
-		paste: function(callback) {
-			this.typeAsShortcut('v', callback);
+		paste: function(callback, focusElement) {
+			this.typeAsShortcut('v', callback, focusElement);
 		},
 		
-		pasteText: function(content, callback) {
+		pasteText: function(content, callback, focusElement) {
 			var actionResult = this.getApplet().setClipboard(content);
 			if (actionResult) {
 				throw { message: "JSRobot error: " + actionResult };
 			}
-			this.paste(callback);
+			this.paste(callback, focusElement);
 		},
 		
-		typeAsShortcut: function(key, callback) {
-			this.appletAction(this.getApplet().typeAsShortcut(this.getKeycode(key)), callback);
+		typeAsShortcut: function(key, callback, focusElement) {
+			this.focus(focusElement, function() {
+				this.appletAction(this.getApplet().typeAsShortcut(this.getKeycode(key)), callback);
+			});
 		},
 		
 		getKeycode: function(key) {
@@ -112,6 +116,11 @@
 		
 		getApplet: function() {
 			return this.appletInstance;
+		},
+		
+		focus: function(focusElement, callback) {
+			if (focusElement) focusElement.focus();
+			callback.apply(this);
 		},
 		
 		appletAction: function(actionResult, callback) {

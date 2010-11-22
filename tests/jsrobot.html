@@ -26,20 +26,31 @@
 		
         <script>
         	$(document).ready(function() {
-				var content, contentDocument;
+				var content, contentDocument, alt;
 				module('Typing In Textarea', {
-					setup: function() { 
+					setup: function() {
+	        			alt = document.getElementById('alt');
+	        			alt.value = '';
 		        		content = document.getElementById('content');
 						content.value = '';
 						content.focus();
 					}
 				});
+				
 		        asyncTest('Simple character', function() {
 					expect(1);
 					robot.type(0x41, false, function() {
 						equals(content.value, 'a');
 						QUnit.start();
 					});
+		        });
+
+		        asyncTest('Simple character with focus element', function() {
+			        expect(1);
+			        robot.type(0x41, false, function() {
+				        equals(alt.value, 'a');
+				        QUnit.start();
+			        }, alt);
 		        });
 				
 				asyncTest('Converting from character to keycode', function() {
@@ -105,6 +116,19 @@
 							QUnit.start();
 						});
 					});
+				});
+				
+				asyncTest('Cut and paste with focusElement', function() {
+					expect(2);
+					content.value = 'test';
+					content.select();
+					robot.cut(function() {
+						equals(content.value, '', 'Cut content from field.');
+						robot.paste(function() {
+							equals(alt.value, 'test', 'Paste content back in.');
+							QUnit.start();
+						}, alt);
+					}, content);
 				});
 				
 				asyncTest('Copy and paste', function() {
@@ -223,9 +247,9 @@
 		<h2 id="qunit-userAgent"></h2>
 		<ol id="qunit-tests"></ol>
 		
+		<textarea id="alt" rows="10" cols="80"></textarea>
 		<textarea id="content" rows="10" cols="80"></textarea>
 		<input type="text" value="Here for focus" id="nextFocus" />
-		
 		
 		<script type="text/javascript" language="JavaScript" src="../robot.js"></script>
     </body>
