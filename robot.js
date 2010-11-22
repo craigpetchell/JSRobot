@@ -119,15 +119,32 @@
 		},
 		
 		appletAction: function(focusElement, continueCallback, action) {
-			var actionResult;
+			var actionResult, listenerTypes = [ 'keyup', 'paste', 'cut' ];
+			var listener = function() {
+				doListeners(false);
+				setTimeout(continueCallback, 0);
+			};
+			var doListeners = function(add) {
+				var i;
+				for (i = 0; i < listenerTypes.length; i++) {
+					if (focusElement.addEventListener) {
+						focusElement[add ? 'addEventListener' : 'removeEventListener'](listenerTypes[i], listener, true);
+					} else {
+						focusElement[add ? 'attachEvent' : 'detachEvent']('on' + listenerTypes[i], listener);
+					}
+				}
+			};
 			if (focusElement) {
 				focusElement.focus();
+				doListeners(true);
 			}
 			actionResult = action.apply(this);
 			if (actionResult) {
 				throw { message: "JSRobot error: " + actionResult };
 			}
-			setTimeout(continueCallback, 100);
+			if (!focusElement) {
+				setTimeout(continueCallback, 100);
+			}
 		}
 	};
 	
