@@ -148,12 +148,10 @@
 
 				asyncTest('Paste provided content', function() {
 					expect(1);
-					content.value = '';
-					content.select();
 					robot.pasteText('Hello World', function() {
 						equals(content.value, 'Hello World', 'Paste provided content into field.');
 						QUnit.start();
-					});
+					}, content);
 				});
 
 				if (document.activeElement) {
