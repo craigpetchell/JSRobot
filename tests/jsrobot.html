@@ -161,7 +161,7 @@
 							equals(content.value, '', 'Should have moved focus instead of typing in text area');
 							equals(document.activeElement, document.getElementById('nextFocus'));
 							QUnit.start();
-						});
+						}, content);
 					});
 				} else {
 					test('Skipping tab test because browser has no document.activeElement support', function() {});
