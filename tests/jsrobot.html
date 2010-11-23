@@ -25,17 +25,21 @@
         <script type="text/javascript" src="qunit/qunit.js"></script>
 		
         <script>
+        QUnit.config.autostart = false;
         	$(document).ready(function() {
+
+        		module('Typing In Textarea', {
+        			autostart: false,
+        			setup: function() {
+            			alt = document.getElementById('alt');
+            			alt.value = '';
+                		content = document.getElementById('content');
+        				content.value = '';
+        				content.focus();
+        			}
+        		});
+        		
 				var content, contentDocument, alt;
-				module('Typing In Textarea', {
-					setup: function() {
-	        			alt = document.getElementById('alt');
-	        			alt.value = '';
-		        		content = document.getElementById('content');
-						content.value = '';
-						content.focus();
-					}
-				});
 				window.robot.onTimeout = function(event, continueCallback) {
 					ok(event !== 'keyup', 'Time out occurred: ' +  event);
 					continueCallback();
@@ -261,7 +265,7 @@
 				});
 				
 				window.robot.onload(function() {
-					QUnit.setup();
+					QUnit.start();
 				});
 			});
         </script>
