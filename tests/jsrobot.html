@@ -36,10 +36,10 @@
 						content.focus();
 					}
 				});
-				window.robot.onTimeout(function(event, continueCallback) {
+				window.robot.onTimeout = function(event, continueCallback) {
 					ok(event !== keyup, 'Time out occurred: ' +  event);
 					continueCallback();
-				});
+				};
 				
 		        asyncTest('Simple character', function() {
 					expect(1);
