@@ -37,7 +37,7 @@
 					}
 				});
 				window.robot.onTimeout = function(event, continueCallback) {
-					ok(event !== keyup, 'Time out occurred: ' +  event);
+					ok(event !== 'keyup', 'Time out occurred: ' +  event);
 					continueCallback();
 				};
 				
