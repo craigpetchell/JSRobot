@@ -119,7 +119,7 @@
 		},
 		
 		appletAction: function(focusElement, continueCallback, action, event) {
-			var actionResult, listenerActivated = false, listenerType = event || 'keyup', timeout;
+			var actionResult, listenerActivated = false, listenerType = event || 'keyup', timeout, curEl, toFocus = [], t = this;
 			var listener = function() {
 				if (listenerActivated) return;
 				listenerActivated = true;
@@ -139,8 +139,7 @@
 			};
 			
 			focusElement = focusElement || document.activeElement;
-			var toFocus = [];
-			var curEl = focusElement;
+			curEl = focusElement;
 			while (curEl) {
 				if (curEl.frameElement) {
 					toFocus.push(curEl.frameElement);
@@ -178,13 +177,16 @@
 					}
 				}, 5000);
 			}
-			actionResult = action.apply(this);
-			if (actionResult) {
-				throw { message: "JSRobot error: " + actionResult };
-			}
-			if (!focusElement && continueCallback) {
-				setTimeout(continueCallback, 100);
-			}
+			// Make sure the browser event loop has a chance to move the focus.
+			setTimeout(function() {
+				actionResult = action.apply(t);
+				if (actionResult) {
+					throw { message: "JSRobot error: " + actionResult };
+				}
+				if (!focusElement && continueCallback) {
+					setTimeout(continueCallback, 100);
+				}
+			}, 0);
 		}
 	};
 	
