@@ -161,7 +161,9 @@ public class JSRobot extends Applet {
 			if (modifierKey >= 0) {
 				robot.keyRelease(modifierKey);
 			}
+			System.err.println("Typed key");
 			waitForIdle();
+			System.err.println("Idle");
 			return null;
 		} catch (Throwable t) {
 			t.printStackTrace();

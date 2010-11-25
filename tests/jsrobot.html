@@ -211,7 +211,7 @@
 				}
 				
 				module('Typing in iframe with design mode', {
-					teardown: function() {
+					setup: function() {
 						if (frame) {
 							document.body.removeChild(frame);
 							frame = null;
@@ -252,15 +252,10 @@
 				asyncTest('Delete', function() {
 					expect(1);
 					setupEditableIframe("content", function(contentDocument) {
-						frame.focus();
-						if (frame.contentWindow) {
-							frame.contentWindow.focus();
-						}
-						contentDocument.body.focus();
 						robot.forwardDelete(function() {
 							equals(contentDocument.body.innerHTML, 'ontent');
 							QUnit.start();
-						});
+						}, contentDocument.body);
 					});
 				});
 				
