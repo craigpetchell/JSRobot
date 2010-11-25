@@ -162,8 +162,12 @@
 			
 			if (!focusElement) {
 				focusElement = document.activeElement;
-				while (focusElement && focusElement.contentDocument) {
-					focusElement = focusElement.contentDocument.activeElement;
+				while (focusElement && (focusElement.contentDocument || focusElement.contentWindow)) {
+					if (focusElement.contentDocument) {
+						focusElement = focusElement.contentDocument.activeElement;
+					} else {
+						focusElement = focusElement.contentWindow.document.activeElement;
+					}
 				}
 			}
 			curEl = focusElement;
