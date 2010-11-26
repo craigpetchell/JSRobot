@@ -63,6 +63,7 @@ public class JSRobot extends Applet {
 						return;
 					}
 					((Timer)e.getSource()).stop();
+					clickToFocusBrowser();
 					new Thread(new Runnable() {
 						public void run() {
 							waitForIdle();
@@ -111,6 +112,20 @@ public class JSRobot extends Applet {
 		}
 	}
 	
+	private void clickToFocusBrowser() {
+		System.err.println("Click to focus browser.");
+		try {
+			Robot robot = getRobot();
+			Point p = getLocationOnScreen();
+			System.err.println(p);
+			robot.mouseMove(p.x, p.y - 5);
+			robot.mousePress(InputEvent.BUTTON1_MASK);
+			robot.mouseRelease(InputEvent.BUTTON1_MASK);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 	private synchronized Robot getRobot() throws AWTException {
 		if (robot == null) {
 			robot = new Robot();
