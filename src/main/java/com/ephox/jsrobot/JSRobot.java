@@ -15,6 +15,7 @@
 
 package com.ephox.jsrobot;
 
+import com.sun.java.swing.plaf.windows.resources.windows;
 import netscape.javascript.JSObject;
 
 import javax.imageio.ImageIO;
@@ -67,7 +68,7 @@ public class JSRobot extends Applet {
 						return;
 					}
 					((Timer) e.getSource()).stop();
-//					clickToFocusBrowser();
+					if (isWindows()) clickToFocusBrowser();
 					new Thread(new Runnable() {
 						public void run() {
 							waitForIdle();
@@ -78,6 +79,10 @@ public class JSRobot extends Applet {
 			});
 			t.start();
 		}
+	}
+
+	private boolean isWindows() {
+		return System.getProperty("os.name").startsWith("Windows");
 	}
 
 	protected void checkNotMinimized() {
