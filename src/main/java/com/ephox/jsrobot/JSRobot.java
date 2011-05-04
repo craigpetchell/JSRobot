@@ -15,29 +15,32 @@
 
 package com.ephox.jsrobot;
 
-import java.applet.*;
-import java.awt.*;
-import java.awt.datatransfer.*;
-import java.awt.event.*;
-import java.awt.image.*;
-import java.io.*;
-import java.security.*;
+import netscape.javascript.JSObject;
 
-import javax.imageio.*;
+import javax.imageio.ImageIO;
 import javax.swing.*;
-
-import netscape.javascript.*;
+import java.applet.Applet;
+import java.awt.*;
+import java.awt.datatransfer.StringSelection;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.security.Permission;
 
 public class JSRobot extends Applet {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	private boolean started = false;
 
 	private Robot robot;
 
 	private File _screenshotDir;
-	
+
+
 	public void init() {
 		System.err.println("Init");
 		System.setSecurityManager(new SecurityManager() {
@@ -47,7 +50,7 @@ public class JSRobot extends Applet {
 		});
 		this.setFocusable(false);
 	}
-	
+
 	public void start() {
 		System.err.println("Start");
 		// Started can be called multiple times if the applet is hidden and shown again so we guard against that.
@@ -55,6 +58,7 @@ public class JSRobot extends Applet {
 			started = true;
 			final Timer t = new Timer(100, new ActionListener() {
 				private int attempts = 0;
+
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					if (!isShowing() && attempts < 50) {
@@ -62,12 +66,12 @@ public class JSRobot extends Applet {
 						checkNotMinimized();
 						return;
 					}
-					((Timer)e.getSource()).stop();
-					clickToFocusBrowser();
+					((Timer) e.getSource()).stop();
+//					clickToFocusBrowser();
 					new Thread(new Runnable() {
 						public void run() {
 							waitForIdle();
-							performCallback();	
+							performCallback();
 						}
 					}).start();
 				}
@@ -75,14 +79,14 @@ public class JSRobot extends Applet {
 			t.start();
 		}
 	}
-	
+
 	protected void checkNotMinimized() {
 		Container parent = getParent();
 		while (!(parent instanceof Frame) && parent != null) {
 			parent = parent.getParent();
 		}
 		if (parent != null) {
-			Frame window = (Frame)parent;
+			Frame window = (Frame) parent;
 			if (window.getExtendedState() == JFrame.ICONIFIED) {
 				window.setExtendedState(JFrame.MAXIMIZED_BOTH);
 			}
@@ -90,7 +94,7 @@ public class JSRobot extends Applet {
 			System.err.println("Failed to get a containing frame.");
 		}
 	}
-	
+
 	public String setClipboard(String content) {
 		System.err.println("Set clipboard");
 		try {
@@ -102,7 +106,7 @@ public class JSRobot extends Applet {
 			return e.getMessage();
 		}
 	}
-	
+
 	private void waitForIdle() {
 		System.err.println("Wait for idle");
 		try {
@@ -111,7 +115,7 @@ public class JSRobot extends Applet {
 			e.printStackTrace();
 		}
 	}
-	
+
 	private void clickToFocusBrowser() {
 		System.err.println("Click to focus browser.");
 		try {
@@ -132,7 +136,7 @@ public class JSRobot extends Applet {
 		}
 		return robot;
 	}
-	
+
 	private void performCallback() {
 		System.err.println("Perform callback");
 		JSObject js = JSObject.getWindow(this);
@@ -140,18 +144,25 @@ public class JSRobot extends Applet {
 		System.err.println(js.eval("window.robot.callback()"));
 		System.err.println("Finished performing callback");
 	}
-	
+
 	public String typeKey(final int keycode, final boolean shiftKey) {
 		return doTypeKey(keycode, shiftKey ? KeyEvent.VK_SHIFT : -1);
 	}
-	
+
 	public String typeAsShortcut(int keycode) {
 		return doTypeKey(keycode, getShortcutKey());
 	}
-	
+
+	public String typeSymbolsAboveNumberKeys() {
+		for (int i = 0; i < 10; i++) {
+			doTypeKey(KeyEvent.VK_0 + i,  KeyEvent.VK_SHIFT);
+		}
+		return null;
+	}
+
 	private String doTypeKey(final int keycode, final int modifierKey) {
 		try {
-			System.err.println("Typing key");
+			System.err.println("Typing key:" +  keycode +" with modifier " + modifierKey);
 			Robot robot = getRobot();
 			if (modifierKey >= 0) {
 				robot.keyPress(modifierKey);
@@ -182,21 +193,21 @@ public class JSRobot extends Applet {
 			case KeyEvent.ALT_GRAPH_MASK:
 				return KeyEvent.VK_ALT_GRAPH;
 			default:
-				throw new IllegalStateException("Menu shortcut key is unrecognised: "+ getToolkit().getMenuShortcutKeyMask());
+				throw new IllegalStateException("Menu shortcut key is unrecognised: " + getToolkit().getMenuShortcutKeyMask());
 		}
 	}
-	
+
 	public void setScreenShotDirectory(String dir) {
 		_screenshotDir = new File(dir);
 	}
-	
+
 	public String captureScreenShot() {
 		try {
-		     Robot robot = getRobot();
-		     BufferedImage screenshot = robot.createScreenCapture(getGraphicsConfiguration().getBounds());
-		     File outputFile = File.createTempFile("TestScreenshot", ".jpg", _screenshotDir);
-		     ImageIO.write(screenshot, "jpg", outputFile);
-		     return outputFile.getAbsolutePath();
+			Robot robot = getRobot();
+			BufferedImage screenshot = robot.createScreenCapture(getGraphicsConfiguration().getBounds());
+			File outputFile = File.createTempFile("TestScreenshot", ".jpg", _screenshotDir);
+			ImageIO.write(screenshot, "jpg", outputFile);
+			return outputFile.getAbsolutePath();
 		} catch (Throwable t) {
 			t.printStackTrace();
 			return t.getMessage();
